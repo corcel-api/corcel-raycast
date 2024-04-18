@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, getPreferenceValues, useNavigation } from "@raycast/api";
 
 import { useChats } from "../hooks";
-import { generateChatFromQuestion, putNewChatInStorage } from "../lib/chat";
+import { CHAT_MODEL_TO_NAME_MAP, generateChatFromQuestion, addOrUpdateChatInStorage } from "../lib/chat";
 
 import Chat from "./chat/Chat";
 
@@ -12,10 +12,11 @@ const Chats: React.FC = () => {
   const navigation = useNavigation();
 
   const createNewChatActionHandler = useCallback(() => {
-    const newChat = generateChatFromQuestion(chatText);
-    putNewChatInStorage(newChat).then(() => {
+    const preferences = getPreferenceValues<Preferences>();
+    const newChat = generateChatFromQuestion(chatText, preferences.chatModel);
+    addOrUpdateChatInStorage(newChat).then(() => {
       fetchChatsFromLocalStorage();
-      navigation.push(<Chat chat={newChat} />);
+      navigation.push(<Chat chat={newChat} onChatUpdated={() => fetchChatsFromLocalStorage()} />);
     });
 
     setChatText("");
@@ -54,16 +55,17 @@ const Chats: React.FC = () => {
             key={chat.id}
             title={chat.title}
             accessories={[
-              {
-                tag: chat.model,
-              },
+              { tag: chat.exchanges.map((exchange) => CHAT_MODEL_TO_NAME_MAP[exchange.model]).join(", ") },
               {
                 text: `${new Date(chat.updated_on).toLocaleDateString()} ${new Date(chat.updated_on).getUTCHours()}:${new Date(chat.updated_on).getMinutes()}`,
               },
             ]}
             actions={
               <ActionPanel>
-                <Action.Push title="Select" target={<Chat chat={chat} />} />
+                <Action.Push
+                  title="Select"
+                  target={<Chat chat={chat} onChatUpdated={() => fetchChatsFromLocalStorage()} />}
+                />
                 <Action title="Delete" onAction={() => deleteChat(chat.id)}></Action>
               </ActionPanel>
             }

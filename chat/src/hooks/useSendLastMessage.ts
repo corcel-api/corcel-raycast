@@ -4,13 +4,13 @@ import { showFailureToast } from "@raycast/utils";
 import { corcelClient } from "../lib/corcel-client";
 import { Exchange, Model } from "../lib/chat";
 
-export const useSendLastMessage = (exchanges: Exchange[], model: Model) => {
+export const useSendLastMessage = (exchanges: Exchange[]) => {
   const [isStreaming, setIsStreaming] = useState(false);
   const cancelledRef = useRef(false);
   const [systemResponse, setSystemResponse] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const streamMessage = async () => {
+  const streamMessage = async (model: Model) => {
     try {
       cancelledRef.current = false;
       setIsStreaming(true);

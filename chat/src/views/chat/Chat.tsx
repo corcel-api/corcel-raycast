@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, getPreferenceValues } from "@raycast/api";
 
 import {
   type Chat,
@@ -8,11 +8,18 @@ import {
   deleteExchangeFromChatStorage,
   generateChatFromQuestion,
   generateExchangeFromQuestion,
-  putNewChatInStorage,
+  addOrUpdateChatInStorage,
+  Model,
+  CHAT_MODEL_TO_NAME_MAP,
 } from "../../lib/chat";
 import { utcTimeAgo } from "../../lib/time";
 import { useSendLastMessage } from "../../hooks";
 import { TOMATO } from "../../lib/colors";
+
+const models: { name: string; value: Model }[] = [
+  { name: CHAT_MODEL_TO_NAME_MAP["cortext-ultra"], value: "cortext-ultra" },
+  { name: CHAT_MODEL_TO_NAME_MAP["mixtral-8x7b"], value: "mixtral-8x7b" },
+];
 
 const ListItem: React.FC<{
   exchanges: Exchange[];
@@ -20,14 +27,12 @@ const ListItem: React.FC<{
   handleSendMessage: () => void;
   setIsLoading: (isLoading: boolean) => void;
   chat: Chat;
-}> = ({ exchange, handleSendMessage, setIsLoading, exchanges, chat }) => {
+  model: Model;
+}> = ({ exchange, handleSendMessage, setIsLoading, exchanges, chat, model }) => {
   const [internalExchange, setInternalExchange] = useState(exchange);
   const internalExchangeRef = useRef(internalExchange);
 
-  const { streamMessage, systemResponse, errorMessage, isStreaming, cancelStream } = useSendLastMessage(
-    exchanges,
-    chat.model,
-  );
+  const { streamMessage, systemResponse, errorMessage, isStreaming, cancelStream } = useSendLastMessage(exchanges);
 
   const updateChatExchange = useCallback(() => {
     addOrUpdateExchange(internalExchangeRef.current, chat.id);
@@ -37,7 +42,7 @@ const ListItem: React.FC<{
     internalExchangeRef.current = internalExchange;
     if (!internalExchange.answer) {
       setIsLoading(true);
-      streamMessage()
+      streamMessage(model)
         .then(() => {
           setIsLoading(false);
           updateChatExchange(); // Save to store
@@ -64,7 +69,11 @@ const ListItem: React.FC<{
       accessories={[{ text: utcTimeAgo(internalExchange.created_on) }]}
       detail={
         <List.Item.Detail
-          markdown={errorMessage ? `> ## Error: ${errorMessage}` : internalExchange.answer?.content || ""}
+          markdown={
+            errorMessage
+              ? `> ## Error: ${errorMessage}`
+              : `**${CHAT_MODEL_TO_NAME_MAP[internalExchange.model]}**: ${internalExchange.answer?.content || "..."}`
+          }
         />
       }
       key={internalExchange.id}
@@ -112,19 +121,20 @@ const ListItem: React.FC<{
   );
 };
 
-const Chat: React.FC<{ chat?: Chat }> = ({ chat }) => {
+const Chat: React.FC<{ chat?: Chat; onChatUpdated?: (updatedChat: Chat) => void }> = ({ chat, onChatUpdated }) => {
+  const preferences = getPreferenceValues<Preferences>();
   const [internalChat, setInternalChat] = useState(chat);
   const [chatText, setChatText] = useState("");
   const [internalIsLoading, setInternalIsLoading] = useState(false);
+  const [model, setModel] = useState<Model>(preferences.chatModel);
 
   const addNewExchange = useCallback(() => {
     if (!internalIsLoading) {
       if (internalChat) {
-        const exchange = generateExchangeFromQuestion(chatText);
+        const exchange = generateExchangeFromQuestion(chatText, model);
         setInternalChat({ ...internalChat, exchanges: [exchange, ...internalChat.exchanges] });
       } else {
-        const newChat = generateChatFromQuestion(chatText);
-        putNewChatInStorage(newChat);
+        const newChat = generateChatFromQuestion(chatText, model);
         setInternalChat(newChat);
       }
 
@@ -141,6 +151,16 @@ const Chat: React.FC<{ chat?: Chat }> = ({ chat }) => {
     [internalIsLoading, setChatText],
   );
 
+  useEffect(() => {
+    if (internalChat) {
+      addOrUpdateChatInStorage(internalChat).then(() => {
+        if (onChatUpdated) {
+          onChatUpdated({ ...internalChat });
+        }
+      });
+    }
+  }, [internalChat]);
+
   return (
     <List
       searchBarPlaceholder="Send a message..."
@@ -149,6 +169,20 @@ const Chat: React.FC<{ chat?: Chat }> = ({ chat }) => {
       isLoading={internalIsLoading}
       isShowingDetail={!!internalChat}
       onSearchTextChange={onSearchTextChange}
+      searchBarAccessory={
+        <List.Dropdown
+          tooltip="Select an Engine"
+          onChange={(newValue) => {
+            setModel(newValue as Model);
+          }}
+        >
+          <List.Dropdown.Section title="Models">
+            {models.map((model) => (
+              <List.Dropdown.Item key={model.value} title={model.name} value={model.value} />
+            ))}
+          </List.Dropdown.Section>
+        </List.Dropdown>
+      }
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Input">
@@ -168,6 +202,7 @@ const Chat: React.FC<{ chat?: Chat }> = ({ chat }) => {
         <List.Section>
           {internalChat.exchanges.map((exchange) => (
             <ListItem
+              model={model}
               chat={internalChat}
               key={exchange.id}
               exchanges={internalChat.exchanges}

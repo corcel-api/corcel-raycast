@@ -36,12 +36,10 @@ export const getChatFromStorage = async (chatId: Chat["id"]) => {
   }
 };
 
-export const putNewChatInStorage = async (chat: Chat) => {
-  // TODO use parse function
-  const chatsFromStorage = await LocalStorage.getItem<string>(CHATS_KEY);
+export const addOrUpdateChatInStorage = async (chat: Chat) => {
+  const chatsMap = await parseChatsFromStorage();
 
-  if (chatsFromStorage) {
-    const chatsMap = JSON.parse(chatsFromStorage) as ChatsMap;
+  if (chatsMap) {
     chatsMap[chat.id] = chat;
 
     await LocalStorage.setItem(CHATS_KEY, JSON.stringify(chatsMap));

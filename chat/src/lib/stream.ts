@@ -38,8 +38,6 @@ export async function ChatStream(resBody: NodeJS.ReadableStream | null) {
         resBody.on("data", (chunk) => {
           if (!isControllerClosed) {
             parser.feed(decoder.decode(chunk));
-          } else {
-            console.log("ENDED");
           }
         });
 

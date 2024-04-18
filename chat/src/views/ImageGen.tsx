@@ -52,8 +52,7 @@ const ImageGen: React.FC = () => {
       columns={Number(preferences.numberOfImages)}
       searchBarAccessory={
         <Grid.Dropdown
-          tooltip="Select an Engine"
-          storeValue={true}
+          tooltip="Select a Model"
           onChange={(newValue) => {
             setModel(newValue as ImageGenerationModel);
             reset();

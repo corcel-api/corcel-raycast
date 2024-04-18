@@ -17,6 +17,7 @@ export type Exchange = {
   question: Question;
   created_on: string;
   answer?: Answer;
+  model: Preferences["chatModel"];
 };
 
 export type Model = Preferences["chatModel"];
@@ -26,6 +27,5 @@ export type Chat = {
   title: string;
   created_on: string;
   updated_on: string;
-  model: Preferences["chatModel"];
   exchanges: Exchange[];
 };

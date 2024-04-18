@@ -46,8 +46,7 @@ const Images: React.FC = () => {
       isLoading={isLoading}
       searchBarAccessory={
         <Grid.Dropdown
-          tooltip="Select an Engine"
-          storeValue={true}
+          tooltip="Select a Model"
           onChange={(newValue) => {
             setFilterOption(newValue as FilterOption);
           }}
