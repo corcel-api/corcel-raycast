@@ -10,6 +10,7 @@ export default function Command() {
     setSelectedChatId(id);
   };
 
+  // TODO - This causes the navigation context to be lost. Revisit this
   if (selectedChatId) {
     return <ExistingChat chatId={selectedChatId} />;
   }
