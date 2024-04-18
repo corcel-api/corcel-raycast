@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "corcel",
-  "title": "Corcel",
+  "title": "Corcel AI",
   "description": "Use various Corcel Applications right here in Raycast",
   "icon": "icon.png",
   "author": "corcel.io",
