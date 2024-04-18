@@ -3,10 +3,15 @@ import { homedir } from "os";
 import fetch from "node-fetch";
 import { writeFile } from "fs/promises";
 
-import { Toast, showToast } from "@raycast/api";
+import { Toast, getPreferenceValues, showToast } from "@raycast/api";
 
 export const downloadMedia = async (url: string, filename: string) => {
-  const path = join(homedir(), "Downloads", `${filename.toLowerCase().split(" ").join("-")}.webp`);
+  const preferences = getPreferenceValues<Preferences>();
+
+  const path = join(
+    preferences.imageDownloadFolder || homedir() + "Downloads",
+    `${filename.toLowerCase().split(" ").join("-")}.webp`,
+  );
 
   try {
     await showToast(Toast.Style.Animated, "Downloading image", "Please wait...");

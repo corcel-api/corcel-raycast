@@ -130,6 +130,13 @@
       ],
       "required": false,
       "default": "cortext-ultra"
+    },
+    {
+      "name": "imageDownloadFolder",
+      "description": "All images you download, will go into this folder",
+      "type": "directory",
+      "title": "Image Download Destination",
+      "required": false
     }
   ],
   "dependencies": {
