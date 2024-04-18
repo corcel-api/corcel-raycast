@@ -16,10 +16,10 @@ import { useSendLastMessage } from "../../hooks";
 const ListItem: React.FC<{
   exchanges: Exchange[];
   exchange: Exchange;
-  createNewExchangeActionHandler: () => void;
+  handleSendMessage: () => void;
   setIsLoading: (isLoading: boolean) => void;
   chat: Chat;
-}> = ({ exchange, createNewExchangeActionHandler, setIsLoading, exchanges, chat }) => {
+}> = ({ exchange, handleSendMessage, setIsLoading, exchanges, chat }) => {
   const [internalExchange, setInternalExchange] = useState(exchange);
   const internalExchangeRef = useRef(internalExchange);
 
@@ -73,7 +73,7 @@ const ListItem: React.FC<{
               shortcut={{ modifiers: ["cmd"], key: "e" }}
               icon={Icon.Text}
               onAction={() => {
-                createNewExchangeActionHandler();
+                handleSendMessage();
               }}
             />
           </ActionPanel.Section>
@@ -129,6 +129,21 @@ const ChatTemplate: React.FC<{ isLoading: boolean; chat?: Chat }> = ({ isLoading
     setChatText("");
   }, [addNewExchange, chatText]);
 
+  const onSearchTextChange = useCallback(
+    (value: string) => {
+      if (!internalIsLoading) {
+        setChatText(value);
+      }
+    },
+    [internalIsLoading, setChatText],
+  );
+
+  const handleSendMessage = useCallback(() => {
+    if (!internalIsLoading) {
+      createNewExchangeActionHandler();
+    }
+  }, [createNewExchangeActionHandler, internalIsLoading]);
+
   return (
     <List
       searchBarPlaceholder="Send a message to Corcel"
@@ -136,7 +151,7 @@ const ChatTemplate: React.FC<{ isLoading: boolean; chat?: Chat }> = ({ isLoading
       filtering={false}
       isLoading={internalIsLoading}
       isShowingDetail={!!internalChat}
-      onSearchTextChange={setChatText}
+      onSearchTextChange={onSearchTextChange}
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Input">
@@ -144,9 +159,7 @@ const ChatTemplate: React.FC<{ isLoading: boolean; chat?: Chat }> = ({ isLoading
               title="Send a Message"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
               icon={Icon.Text}
-              onAction={() => {
-                createNewExchangeActionHandler();
-              }}
+              onAction={handleSendMessage}
             />
           </ActionPanel.Section>
         </ActionPanel>
@@ -165,7 +178,7 @@ const ChatTemplate: React.FC<{ isLoading: boolean; chat?: Chat }> = ({ isLoading
               key={exchange.id}
               exchanges={internalChat.exchanges}
               exchange={exchange}
-              createNewExchangeActionHandler={createNewExchangeActionHandler}
+              handleSendMessage={handleSendMessage}
               setIsLoading={setInternalIsLoading}
             />
           ))}
