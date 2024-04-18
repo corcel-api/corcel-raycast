@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 
 import {
-  Chat,
+  type Chat,
   Exchange,
   addOrUpdateExchange,
   deleteExchangeFromChatStorage,
