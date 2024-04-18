@@ -8,7 +8,7 @@ export const useChats = () => {
   const fetchChatsFromLocalStorage = useCallback(async () => {
     setIsLoading(true);
     const chatsFromStorage = await getChatsFromStorage();
-    chatsFromStorage.sort((a, b) => new Date(b.created_on).getTime() - new Date(a.created_on).getTime());
+    chatsFromStorage.sort((a, b) => new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime());
     setChats(chatsFromStorage);
     setIsLoading(false);
   }, [setChats]);

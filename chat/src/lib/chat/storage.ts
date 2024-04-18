@@ -65,6 +65,7 @@ export const addOrUpdateExchange = async (exchange: Exchange, chatId: ChatId) =>
       newExchanges.unshift(exchange);
       chat.exchanges = newExchanges;
       chatsMap[chatId] = chat;
+      chatsMap[chatId].updated_on = new Date().toISOString();
 
       await LocalStorage.setItem(CHATS_KEY, JSON.stringify(chatsMap));
     }
@@ -88,6 +89,7 @@ export const deleteExchangeFromChatStorage = async (exchangeId: Exchange["id"], 
       const newExchanges = chat.exchanges.filter((exchng) => exchng.id !== exchangeId);
       chat.exchanges = newExchanges;
       chatsMap[chatId] = chat;
+      chatsMap[chatId].updated_on = new Date().toISOString();
 
       await LocalStorage.setItem(CHATS_KEY, JSON.stringify(chatsMap));
     }

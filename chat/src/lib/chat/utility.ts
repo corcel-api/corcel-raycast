@@ -19,6 +19,7 @@ export const generateChatFromQuestion = (question: string): Chat => {
   return {
     exchanges: [exchange],
     created_on: new Date().toISOString(),
+    updated_on: new Date().toISOString(),
     id: randomUUID(),
     model: getPreferenceValues<Preferences>().chatModel,
     title: question,

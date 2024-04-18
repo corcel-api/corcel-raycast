@@ -25,6 +25,7 @@ export type Chat = {
   id: ChatId;
   title: string;
   created_on: string;
+  updated_on: string;
   model: Preferences["chatModel"];
   exchanges: Exchange[];
 };

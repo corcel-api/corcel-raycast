@@ -15,7 +15,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
     const newChat = generateChatFromQuestion(chatText);
     putNewChatInStorage(newChat).then(() => {
       fetchChatsFromLocalStorage();
-      navigation.push(<ChatTemplate chat={newChat} isLoading={false} />);
+      navigation.push(<ChatTemplate chat={newChat} isLoading={true} />);
     });
 
     setChatText("");
@@ -58,7 +58,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
                 tag: chat.model,
               },
               {
-                text: `${new Date(chat.created_on).toLocaleDateString()} ${new Date(chat.created_on).getUTCHours()}:${new Date(chat.created_on).getMinutes()}`,
+                text: `${new Date(chat.updated_on).toLocaleDateString()} ${new Date(chat.updated_on).getUTCHours()}:${new Date(chat.updated_on).getMinutes()}`,
               },
             ]}
             actions={
