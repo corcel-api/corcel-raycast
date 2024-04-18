@@ -2,39 +2,43 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "corcel",
   "title": "Corcel AI",
-  "description": "Use various Corcel Applications right here in Raycast",
+  "description": "Use AI Chat and Image Generation",
   "icon": "icon.png",
   "author": "corcel.io",
   "owner": "corcel",
   "categories": [
-    "Applications"
+    "Productivity",
+    "Developer Tools",
+    "Fun",
+    "Media",
+    "Other"
   ],
   "license": "MIT",
   "commands": [
     {
       "name": "chat",
-      "title": "Chat with AI Assistant",
-      "subtitle": "Corcel Chat",
+      "title": "AI Chat",
+      "subtitle": "Corcel",
       "description": "Have a conversation with AI assistants powered by different models.",
       "mode": "view"
     },
     {
       "name": "chats",
-      "title": "Chat History",
+      "title": "AI Chat History",
       "subtitle": "Corcel",
       "description": "View your chat history and start a new conversation!",
       "mode": "view"
     },
     {
       "name": "images",
-      "title": "All Your Images Generated with Corcel",
+      "title": "AI Image Generation History",
       "subtitle": "Corcel",
       "description": "View your all images generated with corcel!",
       "mode": "view"
     },
     {
       "name": "image",
-      "title": "Generate Images with Corcel",
+      "title": "AI Image Generation",
       "subtitle": "Corcel",
       "description": "Generate images with a variety of models with Corcel",
       "mode": "view",

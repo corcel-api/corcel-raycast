@@ -2,11 +2,32 @@ import { useCallback, useState } from "react";
 import { Action, ActionPanel, Icon, List, getPreferenceValues, useNavigation } from "@raycast/api";
 
 import { useChats } from "../hooks";
-import { CHAT_MODEL_TO_NAME_MAP, generateChatFromQuestion, addOrUpdateChatInStorage } from "../lib/chat";
+import {
+  CHAT_MODEL_TO_NAME_MAP,
+  generateChatFromQuestion,
+  addOrUpdateChatInStorage,
+  Exchange,
+  Model,
+  ChatId,
+} from "../lib/chat";
 
 import Chat from "./chat/Chat";
 
-const Chats: React.FC = () => {
+const getModelsUsedInExchanges = (exhanges: Exchange[]) => {
+  return Object.values(
+    exhanges.reduce(
+      (modelMap, exchange) => {
+        if (!modelMap[exchange.model]) {
+          modelMap[exchange.model] = CHAT_MODEL_TO_NAME_MAP[exchange.model];
+        }
+        return modelMap;
+      },
+      {} as Record<Model, (typeof CHAT_MODEL_TO_NAME_MAP)[Model]>,
+    ),
+  );
+};
+
+const Chats: React.FC<{ onListItemSelect: (id: ChatId) => void }> = ({ onListItemSelect }) => {
   const { chats, isLoading, deleteChat, fetchChatsFromLocalStorage } = useChats();
   const [chatText, setChatText] = useState("");
   const navigation = useNavigation();
@@ -16,7 +37,7 @@ const Chats: React.FC = () => {
     const newChat = generateChatFromQuestion(chatText, preferences.chatModel);
     addOrUpdateChatInStorage(newChat).then(() => {
       fetchChatsFromLocalStorage();
-      navigation.push(<Chat chat={newChat} onChatUpdated={() => fetchChatsFromLocalStorage()} />);
+      navigation.push(<Chat chat={newChat} />);
     });
 
     setChatText("");
@@ -54,17 +75,20 @@ const Chats: React.FC = () => {
           <List.Item
             key={chat.id}
             title={chat.title}
+            icon={Icon.Message}
             accessories={[
-              { tag: chat.exchanges.map((exchange) => CHAT_MODEL_TO_NAME_MAP[exchange.model]).join(", ") },
+              { tag: getModelsUsedInExchanges(chat.exchanges).join(", ") },
               {
                 text: `${new Date(chat.updated_on).toLocaleDateString()} ${new Date(chat.updated_on).getUTCHours()}:${new Date(chat.updated_on).getMinutes()}`,
               },
             ]}
             actions={
               <ActionPanel>
-                <Action.Push
+                <Action
                   title="Select"
-                  target={<Chat chat={chat} onChatUpdated={() => fetchChatsFromLocalStorage()} />}
+                  onAction={() => {
+                    onListItemSelect(chat.id);
+                  }}
                 />
                 <Action title="Delete" onAction={() => deleteChat(chat.id)}></Action>
               </ActionPanel>

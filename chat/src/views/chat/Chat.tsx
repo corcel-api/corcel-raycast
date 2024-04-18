@@ -11,6 +11,7 @@ import {
   addOrUpdateChatInStorage,
   Model,
   CHAT_MODEL_TO_NAME_MAP,
+  formatExchangeResponse,
 } from "../../lib/chat";
 import { utcTimeAgo } from "../../lib/time";
 import { useSendLastMessage } from "../../hooks";
@@ -40,7 +41,7 @@ const ListItem: React.FC<{
 
   useEffect(() => {
     internalExchangeRef.current = internalExchange;
-    if (!internalExchange.answer) {
+    if (!internalExchangeRef.current.answer) {
       setIsLoading(true);
       streamMessage(model)
         .then(() => {
@@ -52,6 +53,12 @@ const ListItem: React.FC<{
         });
     }
   }, [internalExchange]);
+
+  useEffect(() => {
+    return () => {
+      cancelStream();
+    };
+  }, []);
 
   useEffect(() => {
     if (systemResponse) {
@@ -66,16 +73,9 @@ const ListItem: React.FC<{
     <List.Item
       id={internalExchange.id}
       title={internalExchange.question.content}
+      icon={Icon.Message}
       accessories={[{ text: utcTimeAgo(internalExchange.created_on) }]}
-      detail={
-        <List.Item.Detail
-          markdown={
-            errorMessage
-              ? `> ## Error: ${errorMessage}`
-              : `**${CHAT_MODEL_TO_NAME_MAP[internalExchange.model]}**: ${internalExchange.answer?.content || "..."}`
-          }
-        />
-      }
+      detail={<List.Item.Detail markdown={formatExchangeResponse(internalExchange, isStreaming, errorMessage)} />}
       key={internalExchange.id}
       subtitle={errorMessage ? `Error: ${errorMessage}` : ""}
       actions={
@@ -121,11 +121,11 @@ const ListItem: React.FC<{
   );
 };
 
-const Chat: React.FC<{ chat?: Chat; onChatUpdated?: (updatedChat: Chat) => void }> = ({ chat, onChatUpdated }) => {
+const Chat: React.FC<{ chat?: Chat; isLoading?: boolean }> = ({ chat, isLoading }) => {
   const preferences = getPreferenceValues<Preferences>();
   const [internalChat, setInternalChat] = useState(chat);
   const [chatText, setChatText] = useState("");
-  const [internalIsLoading, setInternalIsLoading] = useState(false);
+  const [internalIsLoading, setInternalIsLoading] = useState(!!isLoading);
   const [model, setModel] = useState<Model>(preferences.chatModel);
 
   const addNewExchange = useCallback(() => {
@@ -152,12 +152,16 @@ const Chat: React.FC<{ chat?: Chat; onChatUpdated?: (updatedChat: Chat) => void 
   );
 
   useEffect(() => {
+    setInternalIsLoading(!!isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setInternalChat(chat);
+  }, [chat]);
+
+  useEffect(() => {
     if (internalChat) {
-      addOrUpdateChatInStorage(internalChat).then(() => {
-        if (onChatUpdated) {
-          onChatUpdated({ ...internalChat });
-        }
-      });
+      addOrUpdateChatInStorage(internalChat);
     }
   }, [internalChat]);
 

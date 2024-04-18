@@ -38,4 +38,22 @@ export const getModelUrl = (model: Model) => {
 export const CHAT_MODEL_TO_NAME_MAP: Record<Model, string> = {
   ["cortext-ultra"]: "Cortext Ultra",
   ["mixtral-8x7b"]: "Mixtral",
+} as const;
+
+export const formatExchangeResponse = (exchange: Exchange, isStreaming: boolean, errorMessage?: string) => {
+  const response = `
+  > Question: ${exchange.question.content}
+
+  ${
+    isStreaming && !exchange.answer
+      ? "Generating response..."
+      : exchange.answer
+        ? `**${CHAT_MODEL_TO_NAME_MAP[exchange.model]}**: ${exchange.answer.content}`
+        : errorMessage
+          ? `**Error**: ${errorMessage}`
+          : "**Error Generating response**"
+  }
+  `;
+
+  return response;
 };
