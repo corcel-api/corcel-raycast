@@ -66,7 +66,9 @@ const Images: React.FC = () => {
             content={image.url}
             key={image.id}
             accessory={{
-              icon: image.favourite ? { source: Icon.Heart, tintColor: TOMATO, fallback: Icon.Heart } : Icon.Heart,
+              icon: image.favourite
+                ? { source: "heart-filled.svg", tintColor: TOMATO, fallback: Icon.Heart }
+                : Icon.Heart,
             }}
             actions={
               <ActionPanel>
