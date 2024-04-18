@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "corcel-chat",
-  "title": "Corcel Chat",
+  "name": "corcel",
+  "title": "Corcel",
   "description": "Use various Corcel Applications right here in Raycast",
   "icon": "icon.png",
   "author": "corcel.io",
@@ -26,9 +26,9 @@
     },
     {
       "name": "images",
-      "title": "Image History with Corcel",
+      "title": "Saved images with Corcel",
       "subtitle": "Corcel",
-      "description": "View your image history with corcel!",
+      "description": "View your saved images with corcel!",
       "mode": "view"
     },
     {

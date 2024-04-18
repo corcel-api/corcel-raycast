@@ -76,6 +76,14 @@ const ListItem: React.FC<{
                 createNewExchangeActionHandler();
               }}
             />
+          </ActionPanel.Section>
+          <ActionPanel.Section title="Copy">
+            <Action.CopyToClipboard title="Copy Question" content={internalExchange.question.content} />
+            {internalExchange.answer && (
+              <Action.CopyToClipboard title="Copy Answer" content={internalExchange.answer.content} />
+            )}
+          </ActionPanel.Section>
+          <ActionPanel.Section title="Delete">
             <Action
               title="Delete Message"
               icon={Icon.Trash}
