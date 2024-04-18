@@ -3,6 +3,7 @@ import { Action, ActionPanel, Grid, Icon, Toast, getPreferenceValues, showToast 
 import { useGenerateImage } from "../hooks";
 import { ImageGenerationModel, saveImageToStore } from "../lib/image";
 import { DownloadImageAction } from "../actions";
+import { TOMATO } from "../lib/colors";
 
 const models: { name: string; value: ImageGenerationModel }[] = [
   { name: "Proteus", value: "proteus" },
@@ -26,6 +27,12 @@ const ImageGen: React.FC = () => {
     [data],
   );
 
+  const generateImage = useCallback(() => {
+    if (prompt) {
+      generate(prompt, model);
+    }
+  }, [prompt, model]);
+
   return (
     <Grid
       filtering={false}
@@ -37,9 +44,13 @@ const ImageGen: React.FC = () => {
         <Grid.Dropdown
           tooltip="Select an Engine"
           storeValue={true}
-          onChange={(newValue) => setModel(newValue as ImageGenerationModel)}
+          onChange={(newValue) => {
+            setModel(newValue as ImageGenerationModel);
+            reset();
+            generateImage();
+          }}
         >
-          <Grid.Dropdown.Section title="Emoji Categories">
+          <Grid.Dropdown.Section title="Models">
             {models.map((model) => (
               <Grid.Dropdown.Item key={model.value} title={model.name} value={model.value} />
             ))}
@@ -53,11 +64,7 @@ const ImageGen: React.FC = () => {
               title="Generate Image"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
               icon={Icon.Image}
-              onAction={() => {
-                if (prompt) {
-                  generate(prompt, model);
-                }
-              }}
+              onAction={generateImage}
             />
           </ActionPanel.Section>
         </ActionPanel>
@@ -109,7 +116,7 @@ const ImageGen: React.FC = () => {
       ) : (
         <Grid.EmptyView
           title={errorMessage || "Type in a prompt to generate an image"}
-          icon={errorMessage ? Icon.Exclamationmark : Icon.Image}
+          icon={errorMessage ? { source: Icon.Exclamationmark, tintColor: TOMATO } : Icon.Image}
         />
       )}
     </Grid>

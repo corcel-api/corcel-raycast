@@ -12,6 +12,7 @@ import {
 } from "../../lib/chat";
 import { utcTimeAgo } from "../../lib/time";
 import { useSendLastMessage } from "../../hooks";
+import { TOMATO } from "../../lib/colors";
 
 const ListItem: React.FC<{
   exchanges: Exchange[];
@@ -23,7 +24,10 @@ const ListItem: React.FC<{
   const [internalExchange, setInternalExchange] = useState(exchange);
   const internalExchangeRef = useRef(internalExchange);
 
-  const { streamMessage, systemResponse, errorMessage } = useSendLastMessage(exchanges, chat.model);
+  const { streamMessage, systemResponse, errorMessage, isStreaming, cancelStream } = useSendLastMessage(
+    exchanges,
+    chat.model,
+  );
 
   const updateChatExchange = useCallback(() => {
     addOrUpdateExchange(internalExchangeRef.current, chat.id);
@@ -71,11 +75,21 @@ const ListItem: React.FC<{
             <Action
               title="Send a Message"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
-              icon={Icon.Text}
+              icon={Icon.Message}
               onAction={() => {
                 handleSendMessage();
               }}
             />
+            {isStreaming && (
+              <Action
+                title="Cancel"
+                shortcut={{ modifiers: ["cmd"], key: "c" }}
+                icon={{ source: Icon.Xmark, tintColor: TOMATO }}
+                onAction={() => {
+                  cancelStream();
+                }}
+              />
+            )}
           </ActionPanel.Section>
           <ActionPanel.Section title="Copy">
             <Action.CopyToClipboard title="Copy Question" content={internalExchange.question.content} />
@@ -158,7 +172,7 @@ const ChatTemplate: React.FC<{ isLoading: boolean; chat?: Chat }> = ({ isLoading
             <Action
               title="Send a Message"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
-              icon={Icon.Text}
+              icon={Icon.Message}
               onAction={handleSendMessage}
             />
           </ActionPanel.Section>
