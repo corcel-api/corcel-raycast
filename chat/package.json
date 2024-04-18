@@ -13,21 +13,21 @@
   "commands": [
     {
       "name": "chat",
-      "title": "Chat with Corcel",
-      "subtitle": "Corcel",
-      "description": "Have a conversation with Corcel",
+      "title": "Chat with AI assistant",
+      "subtitle": "Corcel Chat",
+      "description": "Have a conversation with AI assistants powered by different models.",
       "mode": "view"
     },
     {
       "name": "chats",
-      "title": "Chat History with Corcel",
+      "title": "Chat History",
       "subtitle": "Corcel",
-      "description": "View your chat history with corcel and start a new conversation!",
+      "description": "View your chat history and start a new conversation!",
       "mode": "view"
     },
     {
       "name": "images",
-      "title": "Image history with Corcel",
+      "title": "All your images generated with Corcel",
       "subtitle": "Corcel",
       "description": "View your all images generated with corcel!",
       "mode": "view"

@@ -2,11 +2,11 @@ import { useCallback, useState } from "react";
 import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
 
 import { useChats } from "../hooks";
-import { ChatId, generateChatFromQuestion, putNewChatInStorage } from "../lib/chat";
+import { generateChatFromQuestion, putNewChatInStorage } from "../lib/chat";
 
-import ChatTemplate from "./chat/ChatTemplate";
+import Chat from "./chat/Chat";
 
-const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onListItemSelect }) => {
+const Chats: React.FC = () => {
   const { chats, isLoading, deleteChat, fetchChatsFromLocalStorage } = useChats();
   const [chatText, setChatText] = useState("");
   const navigation = useNavigation();
@@ -15,7 +15,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
     const newChat = generateChatFromQuestion(chatText);
     putNewChatInStorage(newChat).then(() => {
       fetchChatsFromLocalStorage();
-      navigation.push(<ChatTemplate chat={newChat} isLoading={true} />);
+      navigation.push(<Chat chat={newChat} />);
     });
 
     setChatText("");
@@ -28,7 +28,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
       searchText={chatText}
       isLoading={isLoading}
       filtering={!hasNoChatHistory}
-      searchBarPlaceholder={hasNoChatHistory ? "Send a message to Corcel" : "Search through your chats"}
+      searchBarPlaceholder={hasNoChatHistory ? "Send a message..." : "Search through your chats"}
       onSearchTextChange={setChatText}
       actions={
         <ActionPanel>
@@ -47,7 +47,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
         </ActionPanel>
       }
     >
-      <List.EmptyView title="No chats found. Type in something to Chat with Corcel" />
+      <List.EmptyView title="No chats found. Type in something to Chat" />
       <List.Section subtitle={chats.length.toString()}>
         {chats.map((chat) => (
           <List.Item
@@ -63,7 +63,7 @@ const Chats: React.FC<{ onListItemSelect: (chatId: ChatId) => void }> = ({ onLis
             ]}
             actions={
               <ActionPanel>
-                <Action title="Select" onAction={() => onListItemSelect(chat.id)}></Action>
+                <Action.Push title="Select" target={<Chat chat={chat} />} />
                 <Action title="Delete" onAction={() => deleteChat(chat.id)}></Action>
               </ActionPanel>
             }

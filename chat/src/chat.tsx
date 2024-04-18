@@ -1,5 +1,5 @@
-import ChatTemplate from "./views/chat/ChatTemplate";
+import Chat from "./views/chat/Chat";
 
 export default function Command() {
-  return <ChatTemplate isLoading={false} />;
+  return <Chat />;
 }
