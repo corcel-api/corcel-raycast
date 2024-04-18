@@ -12,4 +12,5 @@ export type GeneratedImage = {
     prompt: string;
   };
   created_on: string;
+  favourite: boolean;
 };

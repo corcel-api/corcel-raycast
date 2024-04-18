@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
-import { Action, ActionPanel, Grid, Icon, Toast, getPreferenceValues, showToast } from "@raycast/api";
+import { useCallback, useEffect, useState } from "react";
+import { Action, ActionPanel, Grid, Icon, getPreferenceValues } from "@raycast/api";
 import { useGenerateImage } from "../hooks";
-import { ImageGenerationModel, saveImageToStore } from "../lib/image";
-import { DownloadImageAction } from "../actions";
+import { GeneratedImage, ImageGenerationModel, saveImageToStore } from "../lib/image";
+import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
 import { TOMATO } from "../lib/colors";
 
 const models: { name: string; value: ImageGenerationModel }[] = [
@@ -16,6 +16,7 @@ const ImageGen: React.FC = () => {
   const [prompt, setPrompt] = useState("");
   const { generate, isLoading, data, errorMessage, reset } = useGenerateImage();
   const [model, setModel] = useState<ImageGenerationModel>(preferences.model);
+  const [displayedImages, setDisplayedImages] = useState<GeneratedImage[]>();
 
   const onSearchTextChange = useCallback(
     (value: string) => {
@@ -33,6 +34,15 @@ const ImageGen: React.FC = () => {
     }
   }, [prompt, model]);
 
+  useEffect(() => {
+    if (data) {
+      data.forEach((imageData) => {
+        saveImageToStore(imageData);
+      });
+    }
+    setDisplayedImages(data);
+  }, [data]);
+
   return (
     <Grid
       filtering={false}
@@ -47,7 +57,6 @@ const ImageGen: React.FC = () => {
           onChange={(newValue) => {
             setModel(newValue as ImageGenerationModel);
             reset();
-            generateImage();
           }}
         >
           <Grid.Dropdown.Section title="Models">
@@ -76,9 +85,9 @@ const ImageGen: React.FC = () => {
             <Grid.Item key={index} content=""></Grid.Item>
           ))}
         </Grid.Section>
-      ) : data ? (
-        <Grid.Section title={`PROMPT (${model}): ${prompt}`}>
-          {data.map((imageData) => (
+      ) : displayedImages ? (
+        <Grid.Section title={`PROMPT (${displayedImages[0].config.engine}): ${displayedImages[0].config.prompt}`}>
+          {displayedImages.map((imageData) => (
             <Grid.Item
               content={imageData.url}
               key={imageData.id}
@@ -89,24 +98,11 @@ const ImageGen: React.FC = () => {
                     filename={`${imageData.config.prompt}-${imageData.id}`}
                     url={imageData.url}
                   />
-                  <Action
-                    title="Save Image"
-                    shortcut={{ modifiers: ["cmd"], key: "s" }}
-                    icon={Icon.SaveDocument}
-                    onAction={() => {
-                      showToast({
-                        style: Toast.Style.Animated,
-                        title: "Saving image",
-                        message: "Saving your image for later!",
-                      });
-                      saveImageToStore(imageData).then(() => {
-                        showToast({
-                          style: Toast.Style.Success,
-                          title: "Image Saved!",
-                          message: "Saved your image for later!",
-                        });
-                      });
-                    }}
+
+                  <AddOrRemoveImageFromFavoutitesAction
+                    images={displayedImages}
+                    setImages={setDisplayedImages}
+                    image={imageData}
                   />
                 </ActionPanel>
               }

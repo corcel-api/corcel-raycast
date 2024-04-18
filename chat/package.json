@@ -27,9 +27,9 @@
     },
     {
       "name": "images",
-      "title": "Saved images with Corcel",
+      "title": "Image history with Corcel",
       "subtitle": "Corcel",
-      "description": "View your saved images with corcel!",
+      "description": "View your all images generated with corcel!",
       "mode": "view"
     },
     {
@@ -96,11 +96,11 @@
         },
         {
           "name": "steps",
-          "description": "The amount of steps to take when generating the image. More steps usually gives higher quality at the expense of generation time.",
+          "description": "1-7 (inclusive). The amount of steps to take when generating the image. More steps usually gives higher quality at the expense of generation time. Note: This value is converted and rounded to the actual engine value: Proteus/Dreamshaper: 6-12, Playground: 25-51",
           "type": "textfield",
-          "title": "Steps",
+          "title": "Steps (1-7 inclusive)",
           "required": false,
-          "default": "8"
+          "default": "3"
         }
       ]
     }

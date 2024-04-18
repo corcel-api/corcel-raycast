@@ -5,6 +5,7 @@ import { showFailureToast } from "@raycast/utils";
 
 import { getPreferenceValues } from "@raycast/api";
 import { GeneratedImage, ImageGenerationModel } from "../lib/image";
+import { fromClientRangeToModelRange } from "../lib/image/model-step";
 
 const generateImages = (prompt: string, model: ImageGenerationModel) => {
   const preferences = getPreferenceValues<Preferences.Image>();
@@ -25,7 +26,7 @@ const generateImages = (prompt: string, model: ImageGenerationModel) => {
           "content-type": "application/json",
           Authorization: preferences.apiKey,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, steps: fromClientRangeToModelRange(payload.steps, payload.engine) }),
       });
       const res = (await response.json()) as { signed_urls: string[] };
       if (res.signed_urls) {
@@ -41,6 +42,7 @@ const generateImages = (prompt: string, model: ImageGenerationModel) => {
             prompt: payload.text_prompts[0].text,
           },
           created_on: new Date().toISOString(),
+          favourite: false,
         };
         return returnData;
       } else {
