@@ -13,7 +13,7 @@
   "commands": [
     {
       "name": "chat",
-      "title": "Chat with AI assistant",
+      "title": "Chat with AI Assistant",
       "subtitle": "Corcel Chat",
       "description": "Have a conversation with AI assistants powered by different models.",
       "mode": "view"
@@ -27,14 +27,14 @@
     },
     {
       "name": "images",
-      "title": "All your images generated with Corcel",
+      "title": "All Your Images Generated with Corcel",
       "subtitle": "Corcel",
       "description": "View your all images generated with corcel!",
       "mode": "view"
     },
     {
       "name": "image",
-      "title": "Generate images with Corcel",
+      "title": "Generate Images with Corcel",
       "subtitle": "Corcel",
       "description": "Generate images with a variety of models with Corcel",
       "mode": "view",
