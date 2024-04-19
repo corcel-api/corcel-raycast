@@ -46,3 +46,22 @@ Generate, save and download images with a variety of models
 ## Preferences
 
 You have customization options for chat and image generation. Some customizations are command specific while some are affect all commands in the extension.
+
+### Extension preferences
+
+| Title                      | Values                 | Default     | Description                                               |
+| -------------------------- | ---------------------- | ----------- | --------------------------------------------------------- |
+| API Key                    | _user-provided_        | _N/A_       | Your API Key from Corcel                                  |
+| Chat Model                 | Cortext Ultra, Mixtral | Mixtral     | The model that will be used for generating chat responses |
+| Image Download Destination | _user-defined path_    | ~/Downloads | All images you download, will go into this folder         |
+
+### Image Generation Command preferences
+
+| Title            | Values                           | Default | Description                                                                                                                                                                                                                                                                              |
+| ---------------- | -------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model            | Proteus, Dreamshaper, Playground | Proteus | Choose between Proteus, Playground and Dramshaper                                                                                                                                                                                                                                        |
+| Number of Images | _1-3_                            | 2       | The default number of images generated at once. Note: value is clamped at 3                                                                                                                                                                                                              |
+| Width            | _Multiples of 64 from 512-1344_  | 1024    | The width of generated images                                                                                                                                                                                                                                                            |
+| Height           | _Multiples of 64 from 512-1344_  | 1024    | The height of generated images                                                                                                                                                                                                                                                           |
+| Guidance Scale   | _1-3_                            | 2       | How similar the image will be to your prompt. Higher values make the image closer to your prompt, with slightly lower quality. Note: value is clamped at 3                                                                                                                               |
+| Steps            | _(1-7 inclusive)_                | 3       | The amount of steps to take when generating the image. More steps usually gives higher quality at the expense of generation time. Note: This value is converted and rounded to the actual model value. The actual model values are: _6-12 for Proteus/Dreamshaper, 25-51 for Playground_ |
