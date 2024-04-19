@@ -11,7 +11,7 @@ const ImageDetail: React.FC<{ image: GeneratedImage }> = ({ image }) => {
       markdown={`![](${image.url})`}
       actions={
         <ActionPanel>
-          <DownloadImageAction title="Download" url={image.url} filename={`${image.config.prompt}-${image.id}`} />
+          <DownloadImageAction image={image} />
           <Action.CopyToClipboard title="Copy Image URL" content={image.url} />
         </ActionPanel>
       }

@@ -16,6 +16,7 @@ import {
 import { utcTimeAgo } from "../../lib/time";
 import { useSendLastMessage } from "../../hooks";
 import { TOMATO } from "../../lib/colors";
+import { SendMessageAction, OpenChatHistoryCommandAction } from "../../actions";
 
 const models: { name: string; value: Model }[] = [
   { name: CHAT_MODEL_TO_NAME_MAP["cortext-ultra"], value: "cortext-ultra" },
@@ -81,14 +82,7 @@ const ListItem: React.FC<{
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Input">
-            <Action
-              title="Send Message"
-              shortcut={{ modifiers: ["cmd"], key: "e" }}
-              icon={Icon.Message}
-              onAction={() => {
-                handleSendMessage();
-              }}
-            />
+            <SendMessageAction handleSendMessageAction={handleSendMessage} />
             {isStreaming && (
               <Action
                 title="Cancel"
@@ -99,6 +93,9 @@ const ListItem: React.FC<{
                 }}
               />
             )}
+          </ActionPanel.Section>
+          <ActionPanel.Section title="Navigation">
+            <OpenChatHistoryCommandAction />
           </ActionPanel.Section>
           <ActionPanel.Section title="Copy">
             <Action.CopyToClipboard title="Copy Question" content={internalExchange.question.content} />
@@ -140,7 +137,7 @@ const Chat: React.FC<{ chat?: Chat; isLoading?: boolean }> = ({ chat, isLoading 
 
       setChatText("");
     }
-  }, [internalChat, chatText, setInternalChat]);
+  }, [internalChat, chatText, setInternalChat, internalIsLoading]);
 
   const onSearchTextChange = useCallback(
     (value: string) => {
@@ -191,12 +188,10 @@ const Chat: React.FC<{ chat?: Chat; isLoading?: boolean }> = ({ chat, isLoading 
       actions={
         <ActionPanel>
           <ActionPanel.Section title="Input">
-            <Action
-              title="Send a Message"
-              shortcut={{ modifiers: ["cmd"], key: "e" }}
-              icon={Icon.Message}
-              onAction={addNewExchange}
-            />
+            <SendMessageAction handleSendMessageAction={addNewExchange} />
+          </ActionPanel.Section>
+          <ActionPanel.Section title="Navigation">
+            <OpenChatHistoryCommandAction />
           </ActionPanel.Section>
         </ActionPanel>
       }

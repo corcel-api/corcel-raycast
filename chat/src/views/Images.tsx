@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { GeneratedImage, getImagesFromStore } from "../lib/image";
 import { TOMATO } from "../lib/colors";
-import { AddOrRemoveImageFromFavoutitesAction } from "../actions";
+import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
 
 import ImageDetail from "./ImageDetail";
 
@@ -72,8 +72,13 @@ const Images: React.FC = () => {
             }}
             actions={
               <ActionPanel>
-                <Action.Push title="Select" target={<ImageDetail image={image} />} />
-                <AddOrRemoveImageFromFavoutitesAction image={image} images={images} setImages={setImages} />
+                <ActionPanel.Section title="Select">
+                  <Action.Push icon={Icon.Image} title="Image Details" target={<ImageDetail image={image} />} />
+                  <AddOrRemoveImageFromFavoutitesAction image={image} images={images} setImages={setImages} />
+                </ActionPanel.Section>
+                <ActionPanel.Section title="Download">
+                  <DownloadImageAction image={image} />
+                </ActionPanel.Section>
               </ActionPanel>
             }
           />

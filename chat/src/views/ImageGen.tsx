@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { Action, ActionPanel, Grid, Icon, Toast, getPreferenceValues, showToast } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Grid,
+  Icon,
+  LaunchType,
+  Toast,
+  getPreferenceValues,
+  launchCommand,
+  showToast,
+} from "@raycast/api";
 import { useGenerateImage } from "../hooks";
 import { GeneratedImage, ImageGenerationModel, saveImageToStore } from "../lib/image";
 import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
@@ -99,7 +109,7 @@ const ImageGen: React.FC = () => {
               key={imageData.id}
               actions={
                 <ActionPanel>
-                  <ActionPanel.Section title="Save imae">
+                  <ActionPanel.Section title="Save image">
                     <Action
                       icon={Icon.SaveDocument}
                       title="Save for Later"
@@ -107,10 +117,17 @@ const ImageGen: React.FC = () => {
                         handleSaveImage(imageData);
                       }}
                     />
-                    <DownloadImageAction
-                      title="Download"
-                      filename={`${imageData.config.prompt}-${imageData.id}`}
-                      url={imageData.url}
+
+                    <DownloadImageAction image={imageData} />
+                  </ActionPanel.Section>
+
+                  <ActionPanel.Section title="Navigation">
+                    <Action
+                      icon={Icon.List}
+                      title="Open Saved Images"
+                      onAction={() => {
+                        launchCommand({ name: "images", type: LaunchType.UserInitiated });
+                      }}
                     />
                   </ActionPanel.Section>
 

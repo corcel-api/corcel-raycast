@@ -9,7 +9,7 @@ export const downloadMedia = async (url: string, filename: string) => {
   const preferences = getPreferenceValues<Preferences>();
 
   const path = join(
-    preferences.imageDownloadFolder || homedir() + "Downloads",
+    preferences.imageDownloadFolder || homedir() + "/Downloads",
     `${filename.toLowerCase().split(" ").join("-")}.webp`,
   );
 
