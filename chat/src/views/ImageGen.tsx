@@ -113,6 +113,7 @@ const ImageGen: React.FC = () => {
                     <Action
                       icon={Icon.SaveDocument}
                       title="Save for Later"
+                      shortcut={{ modifiers: ["cmd"], key: "s" }}
                       onAction={() => {
                         handleSaveImage(imageData);
                       }}
@@ -125,6 +126,7 @@ const ImageGen: React.FC = () => {
                     <Action
                       icon={Icon.List}
                       title="Open Saved Images"
+                      shortcut={{ modifiers: ["cmd"], key: "h" }}
                       onAction={() => {
                         launchCommand({ name: "images", type: LaunchType.UserInitiated });
                       }}
