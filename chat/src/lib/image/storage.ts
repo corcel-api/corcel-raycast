@@ -26,11 +26,3 @@ export const saveImageToStore = async (image: GeneratedImage) => {
 
   await LocalStorage.setItem(IMAGES_KEY, JSON.stringify(imagesFromStore));
 };
-
-export const saveImagesToStore = async (images: GeneratedImage[]) => {
-  const imagesFromStore = (await parseImagesFromStorage()) || {};
-  images.forEach((image) => {
-    imagesFromStore[image.id] = image;
-  });
-  await LocalStorage.setItem(IMAGES_KEY, JSON.stringify(imagesFromStore));
-};

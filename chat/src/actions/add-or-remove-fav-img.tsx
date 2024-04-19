@@ -1,5 +1,5 @@
 import { Action, Icon, Toast, showToast } from "@raycast/api";
-import { GeneratedImage, saveImagesToStore } from "../lib/image";
+import { GeneratedImage, saveImageToStore } from "../lib/image";
 
 export const AddOrRemoveImageFromFavoutitesAction: React.FC<{
   image: GeneratedImage;
@@ -22,7 +22,7 @@ export const AddOrRemoveImageFromFavoutitesAction: React.FC<{
               }
             });
             setImages(updatedImages);
-            saveImagesToStore(updatedImages)
+            saveImageToStore({ ...image, favourite: true })
               .then(() => {
                 showToast({ title: "Added to favourites successfully!", style: Toast.Style.Success });
               })
@@ -45,7 +45,7 @@ export const AddOrRemoveImageFromFavoutitesAction: React.FC<{
               }
             });
             setImages(updatedImages);
-            saveImagesToStore(updatedImages)
+            saveImageToStore({ ...image, favourite: false })
               .then(() => {
                 showToast({ title: "Removed to favourites successfully!", style: Toast.Style.Success });
               })
