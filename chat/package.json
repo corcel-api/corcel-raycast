@@ -100,11 +100,11 @@
         },
         {
           "name": "steps",
-          "description": "1-7 (inclusive). The amount of steps to take when generating the image. More steps usually gives higher quality at the expense of generation time. Note: This value is converted and rounded to the actual engine value: Proteus/Dreamshaper: 6-12, Playground: 25-51",
+          "description": "0-1 (inclusive). The closer this value is to 1, the more steps the model will take in the image generation process. Note: This value is converted and rounded to the actual engine value: Proteus/Dreamshaper: 6-12, Playground: 25-51",
           "type": "textfield",
-          "title": "Steps (1-7 inclusive)",
+          "title": "Steps (0-1 inclusive)",
           "required": false,
-          "default": "3"
+          "default": "0.3"
         }
       ]
     }
