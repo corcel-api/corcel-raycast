@@ -7,22 +7,33 @@ type ImagesMap = Record<GeneratedImage["id"], GeneratedImage>;
 
 const parseImagesFromStorage = async () =>
   LocalStorage.getItem<string>(IMAGES_KEY).then((imagesFromStorage) =>
-    imagesFromStorage ? (JSON.parse(imagesFromStorage) as ImagesMap) : null,
+    imagesFromStorage ? (JSON.parse(imagesFromStorage) as ImagesMap) : {},
   );
 
 export const getImagesFromStore = async () => {
   const imagesMap = await parseImagesFromStorage();
-  if (imagesMap) {
-    return Object.values(imagesMap);
-  }
 
-  return [];
+  return Object.values(imagesMap);
 };
 
 export const saveImageToStore = async (image: GeneratedImage) => {
-  const imagesFromStore = (await parseImagesFromStorage()) || {};
+  const parsedImages = await parseImagesFromStorage();
+
+  const imagesFromStore = { ...parsedImages };
 
   imagesFromStore[image.id] = image;
 
   await LocalStorage.setItem(IMAGES_KEY, JSON.stringify(imagesFromStore));
+};
+
+export const saveImagesToStore = async (images: GeneratedImage[]) => {
+  const parsedImages = await parseImagesFromStorage();
+
+  const imagesFromStore = { ...parsedImages };
+
+  images.forEach((image) => {
+    imagesFromStore[image.id] = image;
+  });
+
+  return await LocalStorage.setItem(IMAGES_KEY, JSON.stringify(imagesFromStore));
 };

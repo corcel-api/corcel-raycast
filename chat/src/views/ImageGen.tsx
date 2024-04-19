@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Action, ActionPanel, Grid, Icon, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, Grid, Icon, Toast, getPreferenceValues, showToast } from "@raycast/api";
 import { useGenerateImage } from "../hooks";
 import { GeneratedImage, ImageGenerationModel, saveImageToStore } from "../lib/image";
 import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
@@ -35,13 +35,19 @@ const ImageGen: React.FC = () => {
   }, [prompt, model]);
 
   useEffect(() => {
-    if (data) {
-      data.forEach((imageData) => {
-        saveImageToStore(imageData);
-      });
-    }
     setDisplayedImages(data);
   }, [data]);
+
+  const handleSaveImage = useCallback((image: GeneratedImage) => {
+    showToast({ title: "Saving image...", style: Toast.Style.Animated });
+    saveImageToStore(image)
+      .then(() => {
+        showToast({ title: "Image Saved Succcessfully", style: Toast.Style.Success });
+      })
+      .catch(() => {
+        showToast({ title: "Failed to Save Image", style: Toast.Style.Failure });
+      });
+  }, []);
 
   return (
     <Grid
@@ -79,7 +85,7 @@ const ImageGen: React.FC = () => {
         </ActionPanel>
       }
     >
-      {isLoading ? (
+      {isLoading || (!displayedImages && data) ? (
         <Grid.Section title="Generating your images...">
           {new Array(Number(preferences.numberOfImages)).fill(" ").map((_, index) => (
             <Grid.Item key={index} content=""></Grid.Item>
@@ -93,11 +99,20 @@ const ImageGen: React.FC = () => {
               key={imageData.id}
               actions={
                 <ActionPanel>
-                  <DownloadImageAction
-                    title="Download"
-                    filename={`${imageData.config.prompt}-${imageData.id}`}
-                    url={imageData.url}
-                  />
+                  <ActionPanel.Section title="Save imae">
+                    <Action
+                      icon={Icon.SaveDocument}
+                      title="Save for Later"
+                      onAction={() => {
+                        handleSaveImage(imageData);
+                      }}
+                    />
+                    <DownloadImageAction
+                      title="Download"
+                      filename={`${imageData.config.prompt}-${imageData.id}`}
+                      url={imageData.url}
+                    />
+                  </ActionPanel.Section>
 
                   <AddOrRemoveImageFromFavoutitesAction
                     images={displayedImages}
