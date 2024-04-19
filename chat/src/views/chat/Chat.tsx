@@ -41,7 +41,7 @@ const ListItem: React.FC<{
 
   useEffect(() => {
     internalExchangeRef.current = internalExchange;
-    if (!internalExchangeRef.current.answer) {
+    if (!internalExchange.answer) {
       setIsLoading(true);
       streamMessage(model)
         .then(() => {
@@ -82,7 +82,7 @@ const ListItem: React.FC<{
         <ActionPanel>
           <ActionPanel.Section title="Input">
             <Action
-              title="Send a Message"
+              title="Send Message"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
               icon={Icon.Message}
               onAction={() => {
@@ -167,7 +167,7 @@ const Chat: React.FC<{ chat?: Chat; isLoading?: boolean }> = ({ chat, isLoading 
 
   return (
     <List
-      searchBarPlaceholder="Send a message..."
+      searchBarPlaceholder={chat && chat.exchanges.length > 0 ? "Continue conversation..." : "Send a message..."}
       searchText={chatText}
       filtering={false}
       isLoading={internalIsLoading}
@@ -175,7 +175,8 @@ const Chat: React.FC<{ chat?: Chat; isLoading?: boolean }> = ({ chat, isLoading 
       onSearchTextChange={onSearchTextChange}
       searchBarAccessory={
         <List.Dropdown
-          tooltip="Select an Engine"
+          value={model}
+          tooltip="Select a Model"
           onChange={(newValue) => {
             setModel(newValue as Model);
           }}

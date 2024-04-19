@@ -28,4 +28,15 @@
 
 ## Features
 
-AI Chat - Chat with a variety of models hosted on the bittensor network
+### AI Chat
+
+Chat with a variety of models hosted on the bittensor network. AI chat featues: Getting responses from different models while preserving context, a locally stored chat history, copy/paste question and answer, chat deletion etc.
+
+![](./media/chat-screenshot.png)
+![](./media/chat-list-screenshot.png)
+
+### AI Image Generation
+
+Generate, save and download images with a variety of models
+
+![](./media/image-gen-screenshot.png)

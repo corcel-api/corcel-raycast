@@ -133,7 +133,7 @@
         }
       ],
       "required": false,
-      "default": "cortext-ultra"
+      "default": "mixtral-8x7b"
     },
     {
       "name": "imageDownloadFolder",

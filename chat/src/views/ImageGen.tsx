@@ -53,6 +53,7 @@ const ImageGen: React.FC = () => {
       searchBarAccessory={
         <Grid.Dropdown
           tooltip="Select a Model"
+          value={model}
           onChange={(newValue) => {
             setModel(newValue as ImageGenerationModel);
             reset();
