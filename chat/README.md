@@ -1,5 +1,5 @@
 <p align="center">
-    <img width=100 src="/media/icon.png">
+    <img width=100 src="media/icon.png">
 </p>
 
 <h1 align="center">Corcel</h1>
@@ -17,12 +17,12 @@
 
 - Generate an API key [here](https://app.corcel.io/dashboard/api-keys) and copy it to your clipboard
 
-![Generate API key](/media/generate-api-key.png)
-![Generated API key](/media/api-key.png)
+![Generate API key](media/generate-api-key.png)
+![Generated API key](media/api-key.png)
 
 - When you open any command, you will be greeted with this screen. Paste in your API key. If you don't see this, you can always update this in the extension preferences.
 
-![Type in API key](/media/type-api-key.png)
+![Type in API key](media/type-api-key.png)
 
 - That's it! You are good to go.
 
