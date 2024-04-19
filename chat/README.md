@@ -35,7 +35,7 @@ Chat with a variety of models hosted on the bittensor network. AI chat featues: 
 ![Chat example](metadata/1.png)
 ![Chat history](metadata/2.png)
 
-### AI Image Generation
+### Generate AI Image
 
 Generate, save and download images with a variety of models
 

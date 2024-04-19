@@ -1,19 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  Action,
-  ActionPanel,
-  Grid,
-  Icon,
-  LaunchType,
-  Toast,
-  getPreferenceValues,
-  launchCommand,
-  showToast,
-} from "@raycast/api";
+import { Action, ActionPanel, Grid, Icon, Toast, getPreferenceValues, showToast } from "@raycast/api";
 import { useGenerateImage } from "../hooks";
 import { GeneratedImage, ImageGenerationModel, saveImageToStore } from "../lib/image";
 import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
 import { TOMATO } from "../lib/colors";
+import { OpenSavedImagesAction } from "../actions/open-saved-images";
 
 const models: { name: string; value: ImageGenerationModel }[] = [
   { name: "Proteus", value: "proteus" },
@@ -92,13 +83,26 @@ const ImageGen: React.FC = () => {
               onAction={generateImage}
             />
           </ActionPanel.Section>
+          <ActionPanel.Section title="Navigation">
+            <OpenSavedImagesAction />
+          </ActionPanel.Section>
         </ActionPanel>
       }
     >
       {isLoading || (!displayedImages && data) ? (
         <Grid.Section title="Generating your images...">
           {new Array(Number(preferences.numberOfImages)).fill(" ").map((_, index) => (
-            <Grid.Item key={index} content=""></Grid.Item>
+            <Grid.Item
+              actions={
+                <ActionPanel>
+                  <ActionPanel.Section title="Navigation">
+                    <OpenSavedImagesAction />
+                  </ActionPanel.Section>
+                </ActionPanel>
+              }
+              key={index}
+              content=""
+            ></Grid.Item>
           ))}
         </Grid.Section>
       ) : displayedImages ? (
@@ -123,14 +127,7 @@ const ImageGen: React.FC = () => {
                   </ActionPanel.Section>
 
                   <ActionPanel.Section title="Navigation">
-                    <Action
-                      icon={Icon.List}
-                      title="Open Saved Images"
-                      shortcut={{ modifiers: ["cmd"], key: "h" }}
-                      onAction={() => {
-                        launchCommand({ name: "images", type: LaunchType.UserInitiated });
-                      }}
-                    />
+                    <OpenSavedImagesAction />
                   </ActionPanel.Section>
 
                   <AddOrRemoveImageFromFavoutitesAction

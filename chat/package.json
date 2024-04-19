@@ -38,7 +38,7 @@
     },
     {
       "name": "image",
-      "title": "AI Image Generation",
+      "title": "Generate AI Images",
       "subtitle": "Corcel",
       "description": "Generate images with a variety of models with Corcel",
       "mode": "view",
