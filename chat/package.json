@@ -31,9 +31,9 @@
     },
     {
       "name": "images",
-      "title": "AI Image Generation History",
+      "title": "Saved AI Images",
       "subtitle": "Corcel",
-      "description": "View your all images generated with corcel!",
+      "description": "View your all your saved images generated with corcel!",
       "mode": "view"
     },
     {

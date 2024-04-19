@@ -17,12 +17,12 @@
 
 - Generate an API key [here](https://app.corcel.io/dashboard/api-keys) and copy it to your clipboard
 
-![](media/generate-api-key.png)
-![](media/api-key.png)
+![Generate API key](media/generate-api-key.png)
+![Generated API key](media/api-key.png)
 
 - When you open any command, you will be greeted with this screen. Paste in your API key. If you don't see this, you can always update this in the extension preferences.
 
-![](media/type-api-key.png)
+![Type in API key](media/type-api-key.png)
 
 - That's it! You are good to go.
 
@@ -32,13 +32,20 @@
 
 Chat with a variety of models hosted on the bittensor network. AI chat featues: Getting responses from different models while preserving context, a locally stored chat history, copy/paste question and answer, chat deletion etc.
 
-![](metadata/1.png)
-![](metadata/2.png)
+![Chat example](metadata/1.png)
+![Chat history](metadata/2.png)
 
 ### AI Image Generation
 
 Generate, save and download images with a variety of models
 
-![](metadata/3.png)
-![](metadata/4.png)
-![](metadata/5.png)
+![Generated Image](metadata/3.png)
+![Generated Images](metadata/4.png)
+![Single image](metadata/5.png)
+
+## Preferences
+
+You have customization options for chat and image generation. Some customizations are command specific while some are affect all commands in the extension.
+
+![Configuration 1](media/extension-config.png)
+![Configuration 2](media/image-gen-config.png)
