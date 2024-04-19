@@ -46,6 +46,3 @@ Generate, save and download images with a variety of models
 ## Preferences
 
 You have customization options for chat and image generation. Some customizations are command specific while some are affect all commands in the extension.
-
-![Configuration 1](media/extension-config.png)
-![Configuration 2](media/image-gen-config.png)
