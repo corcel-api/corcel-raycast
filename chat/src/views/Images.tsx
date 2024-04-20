@@ -73,7 +73,11 @@ const Images: React.FC = () => {
             actions={
               <ActionPanel>
                 <ActionPanel.Section title="Select">
-                  <Action.Push icon={Icon.Image} title="Image Details" target={<ImageDetail image={image} />} />
+                  <Action.Push
+                    icon={{ source: "icon-image.svg" }}
+                    title="Image Details"
+                    target={<ImageDetail image={image} />}
+                  />
                   <AddOrRemoveImageFromFavoutitesAction image={image} images={images} setImages={setImages} />
                 </ActionPanel.Section>
                 <ActionPanel.Section title="Download">

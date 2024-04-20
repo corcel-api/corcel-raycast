@@ -79,7 +79,7 @@ const ImageGen: React.FC = () => {
             <Action
               title="Generate Image"
               shortcut={{ modifiers: ["cmd"], key: "e" }}
-              icon={Icon.Image}
+              icon={{ source: "icon-image.svg" }}
               onAction={generateImage}
             />
           </ActionPanel.Section>
@@ -143,7 +143,7 @@ const ImageGen: React.FC = () => {
       ) : (
         <Grid.EmptyView
           title={errorMessage || "Type in a prompt to generate an image"}
-          icon={errorMessage ? { source: Icon.Exclamationmark, tintColor: TOMATO } : Icon.Image}
+          icon={errorMessage ? { source: Icon.Exclamationmark, tintColor: TOMATO } : { source: "icon-image.svg" }}
         />
       )}
     </Grid>
