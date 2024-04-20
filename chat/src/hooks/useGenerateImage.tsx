@@ -6,12 +6,16 @@ import { showFailureToast } from "@raycast/utils";
 import { getPreferenceValues } from "@raycast/api";
 import { GeneratedImage, ImageGenerationModel } from "../lib/image";
 import { fromClientRangeToModelRange } from "../lib/image/model-step";
+import { CFG_SCALE_RANGE, NUMBER_OF_IMAGES_RANGE } from "../lib/constants";
+import { clamp } from "../lib/math";
 
 const generateImages = (prompt: string, model: ImageGenerationModel) => {
   const preferences = getPreferenceValues<Preferences.Image>();
-  const requests = new Array(Number(preferences.numberOfImages)).fill(async () => {
+  const requests = new Array(
+    clamp(NUMBER_OF_IMAGES_RANGE[0], NUMBER_OF_IMAGES_RANGE[1], Number(preferences.numberOfImages)),
+  ).fill(async () => {
     const payload = {
-      cfg_scale: Number(preferences.cfgScale),
+      cfg_scale: clamp(CFG_SCALE_RANGE[0], CFG_SCALE_RANGE[1], Number(preferences.cfgScale)),
       height: preferences.height,
       width: preferences.width,
       steps: Number(preferences.steps),

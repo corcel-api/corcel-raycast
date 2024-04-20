@@ -5,6 +5,8 @@ import { GeneratedImage, ImageGenerationModel, saveImageToStore } from "../lib/i
 import { AddOrRemoveImageFromFavoutitesAction, DownloadImageAction } from "../actions";
 import { TOMATO } from "../lib/colors";
 import { OpenSavedImagesAction } from "../actions/open-saved-images";
+import { NUMBER_OF_IMAGES_RANGE } from "../lib/constants";
+import { clamp } from "../lib/math";
 
 const models: { name: string; value: ImageGenerationModel }[] = [
   { name: "Proteus", value: "proteus" },
@@ -56,7 +58,7 @@ const ImageGen: React.FC = () => {
       isLoading={isLoading}
       searchBarPlaceholder="Generate an image of..."
       onSearchTextChange={onSearchTextChange}
-      columns={Number(preferences.numberOfImages)}
+      columns={clamp(NUMBER_OF_IMAGES_RANGE[0], NUMBER_OF_IMAGES_RANGE[1], Number(preferences.numberOfImages))}
       searchBarAccessory={
         <Grid.Dropdown
           tooltip="Select a Model"
