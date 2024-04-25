@@ -33,7 +33,7 @@ export const AddOrRemoveImageFromFavoutitesAction: React.FC<{
         />
       ) : (
         <Action
-          title="Remove From Favourites"
+          title="Remove from Favourites"
           style={Action.Style.Destructive}
           icon={Icon.HeartDisabled}
           onAction={() => {
